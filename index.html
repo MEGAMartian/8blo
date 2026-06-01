@@ -8,40 +8,45 @@
     body { 
       font-family: 'Segoe UI', system-ui, sans-serif; 
       margin: 0; padding: 20px; 
-      background: linear-gradient(135deg, #0f0f0f, #1a1a2e); 
+      background: linear-gradient(135deg, #0a0a0a, #1a1a2e); 
       color: #eee; 
     }
     .container { 
       max-width: 1100px; margin: 0 auto; 
-      background: rgba(255,255,255,0.05); 
-      padding: 40px; border-radius: 16px; 
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4); 
+      background: rgba(255,255,255,0.06); 
+      backdrop-filter: blur(12px);
+      padding: 40px; border-radius: 20px; 
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
     }
-    h1 { text-align: center; margin-bottom: 30px; font-size: 2.4em; }
-    .section { margin-bottom: 40px; }
-    h3 { margin-bottom: 15px; color: #ddd; }
+    h1 { 
+      text-align: center; margin-bottom: 40px; 
+      font-size: 2.5em; color: #fff; letter-spacing: -1px;
+    }
+    .section { margin-bottom: 45px; }
+    h3 { margin-bottom: 18px; color: #ccc; font-weight: 500; }
     .options { display: flex; flex-wrap: wrap; gap: 12px; }
     button { 
-      padding: 14px 20px; 
-      background: #333; color: white; 
-      border: none; border-radius: 10px; 
+      padding: 14px 22px; 
+      background: #2a2a2a; color: white; 
+      border: none; border-radius: 12px; 
       cursor: pointer; font-size: 15px; 
-      transition: all 0.2s; 
+      transition: all 0.25s ease; 
     }
     button:hover, button.active { 
       background: #0066ff; 
-      transform: translateY(-3px); 
-      box-shadow: 0 6px 16px rgba(0,102,255,0.4); 
+      transform: translateY(-4px); 
+      box-shadow: 0 8px 20px rgba(0,102,255,0.3); 
     }
     textarea { 
-      width: 100%; height: 100px; padding: 14px; 
-      background: rgba(255,255,255,0.1); 
-      border: 1px solid rgba(255,255,255,0.2); 
-      border-radius: 8px; color: white; 
+      width: 100%; height: 110px; padding: 16px; 
+      background: rgba(255,255,255,0.08); 
+      border: 1px solid rgba(255,255,255,0.15); 
+      border-radius: 12px; color: white; font-size: 16px; 
     }
     .generate-btn { 
-      background: #00cc66; font-size: 18px; padding: 16px 32px; 
-      margin-top: 20px; width: 100%; 
+      background: #00cc77; font-size: 18px; padding: 18px; 
+      margin-top: 30px; width: 100%; border-radius: 12px; 
+      font-weight: 600;
     }
   </style>
 </head>
@@ -83,7 +88,7 @@
       </div>
     </div>
 
-    <textarea id="custom" placeholder="Additional details (hair, skin tone, age, etc.)"></textarea>
+    <textarea id="custom" placeholder="Additional details (age, hair, skin tone, ethnicity, etc.)"></textarea>
 
     <button class="generate-btn" onclick="generatePrompt()">Copy Full Prompt</button>
   </div>
@@ -100,12 +105,12 @@
     }
 
     function generatePrompt() {
-      const body = Array.from(document.querySelectorAll('#bodyFrame button.active')).map(b => b.textContent).join(", ");
-      const goal = Array.from(document.querySelectorAll('#breastGoal button.active')).map(b => b.textContent).join(", ");
+      const body = Array.from(document.querySelectorAll('#bodyFrame button.active')).map(b => b.textContent).join(", ") || "average feminine frame";
+      const goal = Array.from(document.querySelectorAll('#breastGoal button.active')).map(b => b.textContent).join(", ") || "natural breasts";
       const chars = Array.from(document.querySelectorAll('#characteristics button.active')).map(b => b.textContent).join(", ");
       const custom = document.getElementById('custom').value.trim();
 
-      let prompt = `Photorealistic image of a woman with ${body || "average feminine frame"}. Breast goal: ${goal || "natural"}. ${chars ? chars + ". " : ""}${custom ? custom + "." : ""} High detail, natural lighting.`;
+      let prompt = `Photorealistic image of a woman with ${body}. Breast goal: ${goal}. ${chars ? chars + ". " : ""}${custom ? custom + "." : ""} High detail, natural lighting, consistent appearance.`;
 
       navigator.clipboard.writeText(prompt);
       alert("✅ Prompt copied to clipboard!");
