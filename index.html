@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xCloude - Image Test Lab</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+    h1 { color: #333; }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    textarea { width: 100%; height: 120px; margin: 10px 0; padding: 10px; }
+    button { padding: 10px 16px; margin: 5px; background: #000; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #333; }
+    .preset { background: #444; }
+    .output { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>xCloude - Image Test Lab</h1>
+    
+    <h3>Character Description</h3>
+    <textarea id="description" placeholder="Enter character description here..."></textarea>
+
+    <h3>Quick Presets</h3>
+    <button class="preset" onclick="loadPreset(1)">Natural 49yo</button>
+    <button class="preset" onclick="loadPreset(2)">Significant Ptosis</button>
+    <button class="preset" onclick="loadPreset(3)">Post-Pregnancy</button>
+    <button class="preset" onclick="loadPreset(4)">Deep Brown Skin</button>
+
+    <div class="output">
+      <button onclick="copyPrompt('kitchen-clothed')">Copy Kitchen Clothed Prompt</button>
+      <button onclick="copyPrompt('kitchen-nude')">Copy Kitchen Topless Prompt</button>
+      <button onclick="copyPrompt('single')">Copy Single Portrait Prompt</button>
+      <button onclick="copyPrompt('context')">Copy Context Sheet Prompt</button>
+    </div>
+  </div>
+
+  <script>
+    const baseKitchen = `Wide angle lens, photorealistic modern kitchen scene. Three triplet sisters who look nearly identical, all the same age, standing naturally around a large kitchen island as if casually talking to each other. The island is approximately ten feet long and comes up to their waist height. The three women are clearly separated with natural spacing between them. One woman stands at the far end of the island facing forward, one stands at the corner in three-quarter view, and one stands along the long side in clear profile view. Camera height at chest level, showing from just below the waist up. Bright, clean lighting.`;
+
+    function loadPreset(num) {
+      const desc = document.getElementById('description');
+      if (num === 1) desc.value = "49-year-old woman with fair skin, significant natural ptosis, full lower pole with low upper pole volume, strong east-west breast orientation, shoulder-length wavy brown hair";
+      if (num === 2) desc.value = "49-year-old woman with deep natural ptosis, very pendulous breasts, full lower pole, low upper pole, strong east-west orientation, shoulder-length wavy brown hair";
+      if (num === 3) desc.value = "47-year-old woman with post-pregnancy breasts, significant ptosis, loose skin on stomach, full lower pole, shoulder-length wavy brown hair";
+      if (num === 4) desc.value = "49-year-old woman with deep brown skin, significant natural ptosis, full lower pole with low upper pole volume, strong east-west breast orientation, shoulder-length wavy black hair";
+    }
+
+    function copyPrompt(type) {
+      const desc = document.getElementById('description').value.trim();
+      if (!desc) {
+        alert("Please enter a character description first");
+        return;
+      }
+
+      let fullPrompt = "";
+
+      if (type === 'kitchen-clothed') {
+        fullPrompt = baseKitchen + "\n\n" + desc + ", wearing a fitted white ribbed tank top and light gray boy shorts";
+      } 
+      else if (type === 'kitchen-nude') {
+        fullPrompt = baseKitchen + "\n\n" + desc + ", completely topless, wearing only light gray boy shorts";
+      } 
+      else if (type === 'single') {
+        fullPrompt = "Photorealistic portrait of " + desc + ", standing in a modern luxury apartment with city view at night, soft lighting";
+      } 
+      else if (type === 'context') {
+        fullPrompt = "Contact sheet style, multiple poses of the same woman: " + desc + ", various poses including arms up, arms down, side view, back view, hands on hips, in a modern bedroom setting, clean white background elements";
+      }
+
+      navigator.clipboard.writeText(fullPrompt);
+      alert("Prompt copied to clipboard!");
+    }
+  </script>
+</body>
+</html>
