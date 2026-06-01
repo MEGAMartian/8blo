@@ -14,23 +14,19 @@
     .container { 
       max-width: 1100px; margin: 0 auto; 
       background: rgba(255,255,255,0.06); 
-      backdrop-filter: blur(12px);
       padding: 40px; border-radius: 20px; 
       box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
     }
-    h1 { 
-      text-align: center; margin-bottom: 40px; 
-      font-size: 2.5em; color: #fff; letter-spacing: -1px;
-    }
+    h1 { text-align: center; margin-bottom: 40px; font-size: 2.5em; color: #fff; }
     .section { margin-bottom: 45px; }
-    h3 { margin-bottom: 18px; color: #ccc; font-weight: 500; }
+    h3 { margin-bottom: 18px; color: #ddd; font-weight: 500; }
     .options { display: flex; flex-wrap: wrap; gap: 12px; }
     button { 
       padding: 14px 22px; 
       background: #2a2a2a; color: white; 
       border: none; border-radius: 12px; 
       cursor: pointer; font-size: 15px; 
-      transition: all 0.25s ease; 
+      transition: all 0.25s; 
     }
     button:hover, button.active { 
       background: #0066ff; 
@@ -54,66 +50,66 @@
   <div class="container">
     <h1>8BLO • Visualization Lab</h1>
 
-    <!-- Section 1: Body Frame -->
     <div class="section">
-      <h3>1. Body Frame</h3>
-      <div class="options" id="bodyFrame">
-        <button onclick="selectSingle(this)">Slim Feminine</button>
-        <button onclick="selectSingle(this)">Average Feminine</button>
-        <button onclick="selectSingle(this)">Broad Shoulders</button>
-        <button onclick="selectSingle(this)">Curvy</button>
-        <button onclick="selectSingle(this)">Fuller Figure</button>
+      <h3>Character Description</h3>
+      <textarea id="description" placeholder="Paste or edit full description here..."></textarea>
+    </div>
+
+    <div class="section">
+      <h3>Quick Presets</h3>
+      <div class="options">
+        <button onclick="loadPreset(1)">Natural 49yo</button>
+        <button onclick="loadPreset(2)">Significant Ptosis</button>
+        <button onclick="loadPreset(3)">Post-Pregnancy</button>
+        <button onclick="loadPreset(4)">Deep Brown Skin</button>
       </div>
     </div>
 
-    <!-- Section 2: Breast Goal -->
     <div class="section">
-      <h3>2. Breast Goal</h3>
-      <div class="options" id="breastGoal">
-        <button onclick="selectSingle(this)">Natural</button>
-        <button onclick="selectSingle(this)">Subtle Enhancement</button>
-        <button onclick="selectSingle(this)">Full Round</button>
-        <button onclick="selectSingle(this)">Obvious Implants</button>
-      </div>
+      <button class="generate-btn" onclick="copyKitchenClothed()">Kitchen Scene - Clothed</button>
+      <button class="generate-btn" onclick="copyKitchenNude()">Kitchen Scene - Topless</button>
+      <button class="generate-btn" onclick="copyContactSheet()">Contact Sheet</button>
+      <button class="generate-btn" onclick="copySingle()">Single Portrait</button>
     </div>
-
-    <!-- Section 3: Additional Characteristics (Multiple) -->
-    <div class="section">
-      <h3>3. Additional Characteristics (select all that apply)</h3>
-      <div class="options" id="characteristics">
-        <button onclick="toggleSelect(this)">Significant Ptosis</button>
-        <button onclick="toggleSelect(this)">Post-Pregnancy Changes</button>
-        <button onclick="toggleSelect(this)">Breast Lift (Anchor Scars)</button>
-        <button onclick="toggleSelect(this)">Trans Feminine Features</button>
-      </div>
-    </div>
-
-    <textarea id="custom" placeholder="Additional details (age, hair, skin tone, ethnicity, etc.)"></textarea>
-
-    <button class="generate-btn" onclick="generatePrompt()">Copy Full Prompt</button>
   </div>
 
   <script>
-    function selectSingle(btn) {
-      const parent = btn.parentElement;
-      Array.from(parent.children).forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    const baseKitchen = `Wide angle lens, photorealistic modern kitchen scene. Three triplet sisters who look nearly identical, standing naturally around a large kitchen island as if casually talking to each other. The island is approximately ten feet long and waist height. The three women are clearly separated with natural spacing. One at the far end facing forward, one at the corner in 3/4 view, one on the long side in profile. Camera at chest level, bright clean lighting.`;
+
+    function loadPreset(n) {
+      const d = document.getElementById('description');
+      if (n===1) d.value = "49-year-old woman with fair skin, significant natural ptosis, full lower pole with low upper pole volume, strong east-west breast orientation, shoulder-length wavy brown hair";
+      if (n===2) d.value = "49-year-old woman with very pendulous breasts, significant natural ptosis, full lower pole, minimal upper pole, strong east-west orientation, shoulder-length wavy brown hair";
+      if (n===3) d.value = "47-year-old woman with post-pregnancy changes, noticeable ptosis, loose stomach skin, full lower pole, shoulder-length wavy brown hair";
+      if (n===4) d.value = "49-year-old woman with deep brown skin, significant natural ptosis, full lower pole, low upper pole volume, strong east-west orientation, shoulder-length wavy black hair";
     }
 
-    function toggleSelect(btn) {
-      btn.classList.toggle('active');
+    function copyKitchenClothed() {
+      const desc = document.getElementById('description').value.trim();
+      if (!desc) return alert("Please enter a character description");
+      navigator.clipboard.writeText(baseKitchen + "\n\n" + desc + ", wearing fitted white ribbed tank top and black biker shorts");
+      alert("✅ Kitchen Clothed prompt copied!");
     }
 
-    function generatePrompt() {
-      const body = Array.from(document.querySelectorAll('#bodyFrame button.active')).map(b => b.textContent).join(", ") || "average feminine frame";
-      const goal = Array.from(document.querySelectorAll('#breastGoal button.active')).map(b => b.textContent).join(", ") || "natural breasts";
-      const chars = Array.from(document.querySelectorAll('#characteristics button.active')).map(b => b.textContent).join(", ");
-      const custom = document.getElementById('custom').value.trim();
+    function copyKitchenNude() {
+      const desc = document.getElementById('description').value.trim();
+      if (!desc) return alert("Please enter a character description");
+      navigator.clipboard.writeText(baseKitchen + "\n\n" + desc + ", completely topless, wearing only black biker shorts");
+      alert("✅ Kitchen Topless prompt copied!");
+    }
 
-      let prompt = `Photorealistic image of a woman with ${body}. Breast goal: ${goal}. ${chars ? chars + ". " : ""}${custom ? custom + "." : ""} High detail, natural lighting, consistent appearance.`;
+    function copyContactSheet() {
+      const desc = document.getElementById('description').value.trim();
+      if (!desc) return alert("Please enter a character description");
+      navigator.clipboard.writeText("Contact sheet, photorealistic, multiple professional poses of the exact same woman in a luxurious modern apartment with large windows and city skyline view at dusk. Show a good mix of clothed and topless shots. Include front view, side profiles, 3/4 angles, arms raised, hands on hips, looking over shoulder, and back views. Clean, high detail, consistent face and body across all images, natural realistic lighting.\n\n" + desc);
+      alert("✅ Contact Sheet prompt copied!");
+    }
 
-      navigator.clipboard.writeText(prompt);
-      alert("✅ Prompt copied to clipboard!");
+    function copySingle() {
+      const desc = document.getElementById('description').value.trim();
+      if (!desc) return alert("Please enter a character description");
+      navigator.clipboard.writeText("Photorealistic portrait of " + desc + ", standing in modern apartment with city view at night, soft cinematic lighting");
+      alert("✅ Single Portrait prompt copied!");
     }
   </script>
 </body>
