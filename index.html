@@ -5,105 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>8BLO • Visualization Lab</title>
   <style>
-    body { 
-      font-family: 'Segoe UI', system-ui, sans-serif; 
-      margin: 0; padding: 24px; 
-      background: #0f0f0f; color: #eee; 
-    }
-    .container { 
-      max-width: 1080px; margin: 0 auto; 
-      background: #1a1a1a; 
-      padding: 40px; border-radius: 20px; 
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
-    }
-    h1 { text-align: center; margin-bottom: 40px; font-size: 2.4em; }
-    .section { margin-bottom: 40px; }
-    h3 { margin-bottom: 16px; color: #ccc; font-weight: 500; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 24px; background: #0f0f0f; color: #eee; }
+    .container { max-width: 1100px; margin: 0 auto; background: #1a1a1a; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+    h1 { text-align: center; margin-bottom: 40px; font-size: 2.5em; color: #fff; }
 
-    /* Silhouettes */
-    .silhouette-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .section { margin-bottom: 50px; }
+    h3 { margin-bottom: 18px; color: #ccc; font-weight: 500; }
+
+    /* Section 1 - Distinct Silhouettes */
+    .silhouette-row { display: flex; gap: 24px; flex-wrap: wrap; }
     .silhouette { 
-      width: 85px; height: 150px; 
+      width: 90px; height: 165px; 
       background: #222; 
-      border: 3px solid #555; 
+      border: 4px solid #555; 
       cursor: pointer; 
-      transition: all 0.2s;
+      transition: all 0.25s;
     }
-    .silhouette.active { border-color: #ff9500; box-shadow: 0 0 0 5px rgba(255,149,0,0.15); }
+    .silhouette.active { border-color: #ff9500; box-shadow: 0 0 0 6px rgba(255,149,0,0.3); }
 
-    .silhouette.slim { width: 65px; border-radius: 999px; }
-    .silhouette.average { border-radius: 80px 80px 60px 60px; }
-    .silhouette.broad { width: 105px; border-radius: 40px 40px 60px 60px; }
-    .silhouette.curvy { width: 95px; border-radius: 999px 999px 120px 120px; }
-    .silhouette.full { width: 115px; border-radius: 60px 60px 100px 100px; }
+    .silhouette.slim    { width: 65px; border-radius: 999px; }
+    .silhouette.average { border-radius: 75px 75px 55px 55px; }
+    .silhouette.broad   { width: 112px; border-radius: 40px 40px 70px 70px; }
+    .silhouette.curvy   { width: 98px; border-radius: 999px 999px 130px 130px; }
+    .silhouette.full    { width: 122px; border-radius: 55px 55px 115px 115px; }
 
-    /* Button groups */
-    .button-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .divider { width: 1px; height: 36px; background: #444; margin: 0 12px; }
+    /* Section 2 - Two independent groups */
+    .group { display: flex; flex-wrap: wrap; gap: 10px; }
+    .divider { width: 2px; height: 42px; background: #444; margin: 0 18px; align-self: center; }
 
     button { 
-      padding: 12px 20px; 
-      background: #2a2a2a; color: white; 
-      border: none; border-radius: 10px; 
-      cursor: pointer; font-size: 15px; 
+      padding: 13px 22px; background: #2a2a2a; color: white; 
+      border: none; border-radius: 10px; cursor: pointer; font-size: 15px; 
       transition: all 0.2s;
     }
-    button:hover, button.active { 
-      background: #0066ff; 
-      transform: translateY(-2px); 
-    }
+    button:hover, button.active { background: #0066ff; transform: translateY(-3px); }
 
-    textarea { 
-      width: 100%; height: 100px; padding: 14px; 
-      background: #222; border: 1px solid #444; 
-      border-radius: 10px; color: white; font-size: 15px; 
-    }
-    .generate-btn { 
-      background: #00cc77; font-size: 17px; padding: 16px; 
-      width: 100%; margin-top: 20px; border-radius: 12px; font-weight: 600;
-    }
+    textarea { width: 100%; height: 110px; padding: 16px; background: #222; border: 1px solid #444; border-radius: 12px; color: white; }
+    .generate-btn { background: #00cc77; font-size: 17px; padding: 18px; width: 100%; margin-top: 30px; border-radius: 12px; font-weight: 600; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>8BLO • Visualization Lab</h1>
 
-    <!-- Section 1: Body Frame -->
+    <!-- Section 1: Body Frame - Silhouettes -->
     <div class="section">
       <h3>1. Body Frame</h3>
       <div class="silhouette-row" id="bodyFrame">
-        <div class="silhouette slim" onclick="selectSilhouette(this, 'Slim Feminine')"></div>
-        <div class="silhouette average" onclick="selectSilhouette(this, 'Average Feminine')"></div>
-        <div class="silhouette broad" onclick="selectSilhouette(this, 'Broad Shoulders')"></div>
-        <div class="silhouette curvy" onclick="selectSilhouette(this, 'Curvy')"></div>
-        <div class="silhouette full" onclick="selectSilhouette(this, 'Fuller Figure')"></div>
+        <div class="silhouette slim"     onclick="selectSilhouette(this, 'Slim Feminine')"></div>
+        <div class="silhouette average"  onclick="selectSilhouette(this, 'Average Feminine')"></div>
+        <div class="silhouette broad"    onclick="selectSilhouette(this, 'Broad Shoulders')"></div>
+        <div class="silhouette curvy"    onclick="selectSilhouette(this, 'Curvy')"></div>
+        <div class="silhouette full"     onclick="selectSilhouette(this, 'Fuller Figure')"></div>
       </div>
     </div>
 
-    <!-- Section 2: Breast Goal -->
+    <!-- Section 2: Breast Goal - Style + Size (independent) -->
     <div class="section">
       <h3>2. Breast Goal</h3>
-      <div class="button-row">
-        <!-- Style Group -->
-        <button onclick="selectBreastStyle(this)">Natural</button>
-        <button onclick="selectBreastStyle(this)">Subtle Enhancement</button>
-        <button onclick="selectBreastStyle(this)">Full Round</button>
-        <button onclick="selectBreastStyle(this)">Obvious Implants</button>
+      <div class="group">
+        <!-- Style group -->
+        <button onclick="selectStyle(this)">Natural</button>
+        <button onclick="selectStyle(this)">Subtle Enhancement</button>
+        <button onclick="selectStyle(this)">Full Round</button>
+        <button onclick="selectStyle(this)">Obvious Implants</button>
 
         <div class="divider"></div>
 
-        <!-- Size Group -->
-        <button onclick="selectBreastSize(this)">Small</button>
-        <button onclick="selectBreastSize(this)">Medium</button>
-        <button onclick="selectBreastSize(this)">Large</button>
-        <button onclick="selectBreastSize(this)">Very Large</button>
+        <!-- Size group -->
+        <button onclick="selectSize(this)">Small</button>
+        <button onclick="selectSize(this)">Medium</button>
+        <button onclick="selectSize(this)">Large</button>
+        <button onclick="selectSize(this)">Very Large</button>
       </div>
     </div>
 
     <!-- Section 3: Additional Characteristics -->
     <div class="section">
       <h3>3. Additional Characteristics (select all that apply)</h3>
-      <div class="options" id="characteristics">
+      <div class="group">
         <button onclick="toggleSelect(this)">Significant Ptosis</button>
         <button onclick="toggleSelect(this)">Post-Pregnancy Changes</button>
         <button onclick="toggleSelect(this)">Breast Lift (Anchor Scars)</button>
@@ -121,28 +101,31 @@
     let selectedStyle = "";
     let selectedSize = "";
 
-    function selectSilhouette(element, label) {
-      document.querySelectorAll('#bodyFrame .silhouette').forEach(el => el.classList.remove('active'));
-      element.classList.add('active');
+    function selectSilhouette(el, label) {
+      document.querySelectorAll('#bodyFrame .silhouette').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
       selectedBody = label;
     }
 
-    function selectBreastStyle(btn) {
-      const group = btn.parentElement;
-      Array.from(group.children).forEach(b => {
-        if (!b.classList.contains('divider')) b.classList.remove('active');
+    function selectStyle(btn) {
+      // Only clear other style buttons, not the size buttons
+      const buttons = Array.from(btn.parentElement.children).filter(b => !b.classList.contains('divider'));
+      buttons.forEach(b => {
+        if (b.textContent === btn.textContent || ["Natural","Subtle Enhancement","Full Round","Obvious Implants"].includes(b.textContent)) {
+          b.classList.toggle('active', b === btn);
+        }
       });
-      btn.classList.add('active');
-      selectedStyle = btn.textContent;
+      selectedStyle = btn.classList.contains('active') ? btn.textContent : "";
     }
 
-    function selectBreastSize(btn) {
-      const group = btn.parentElement;
-      Array.from(group.children).forEach(b => {
-        if (!b.classList.contains('divider')) b.classList.remove('active');
+    function selectSize(btn) {
+      const buttons = Array.from(btn.parentElement.children).filter(b => !b.classList.contains('divider'));
+      buttons.forEach(b => {
+        if (b.textContent === btn.textContent || ["Small","Medium","Large","Very Large"].includes(b.textContent)) {
+          b.classList.toggle('active', b === btn);
+        }
       });
-      btn.classList.add('active');
-      selectedSize = btn.textContent;
+      selectedSize = btn.classList.contains('active') ? btn.textContent : "";
     }
 
     function toggleSelect(btn) {
@@ -154,13 +137,9 @@
       const custom = document.getElementById('custom').value.trim();
 
       let breastDesc = "";
-      if (selectedStyle && selectedSize) {
-        breastDesc = `${selectedSize} ${selectedStyle.toLowerCase()} breasts`;
-      } else if (selectedStyle) {
-        breastDesc = selectedStyle;
-      } else if (selectedSize) {
-        breastDesc = `${selectedSize} breasts`;
-      }
+      if (selectedStyle && selectedSize) breastDesc = `${selectedSize} ${selectedStyle.toLowerCase()} breasts`;
+      else if (selectedStyle) breastDesc = selectedStyle;
+      else if (selectedSize) breastDesc = `${selectedSize} breasts`;
 
       let prompt = `Photorealistic image of a woman with ${selectedBody || "average feminine frame"}. ${breastDesc ? breastDesc + ". " : ""}${chars ? chars + ". " : ""}${custom ? custom + "." : ""} High detail, natural lighting, consistent appearance.`;
 
