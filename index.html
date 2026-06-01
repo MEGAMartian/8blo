@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>8BLO • Image Test Lab</title>
+  <title>8BLO • Visualization Lab</title>
   <style>
     body { 
       font-family: 'Segoe UI', system-ui, sans-serif; 
@@ -14,92 +14,98 @@
     .container { 
       max-width: 1100px; margin: 0 auto; 
       background: rgba(255,255,255,0.05); 
-      backdrop-filter: blur(10px);
       padding: 40px; border-radius: 16px; 
       box-shadow: 0 8px 32px rgba(0,0,0,0.4); 
     }
-    h1 { 
-      text-align: center; margin-bottom: 30px; 
-      font-size: 2.2em; color: #fff; 
-    }
-    .section { margin-bottom: 30px; }
-    textarea { 
-      width: 100%; height: 110px; padding: 14px; 
-      background: rgba(255,255,255,0.1); 
-      border: 1px solid rgba(255,255,255,0.2); 
-      border-radius: 8px; color: white; font-size: 16px; 
-    }
-    .presets { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+    h1 { text-align: center; margin-bottom: 30px; font-size: 2.4em; }
+    .section { margin-bottom: 40px; }
+    h3 { margin-bottom: 15px; color: #ddd; }
+    .options { display: flex; flex-wrap: wrap; gap: 12px; }
     button { 
-      padding: 12px 20px; 
+      padding: 14px 20px; 
       background: #333; color: white; 
-      border: none; border-radius: 8px; 
+      border: none; border-radius: 10px; 
       cursor: pointer; font-size: 15px; 
       transition: all 0.2s; 
     }
-    button:hover { 
-      background: #555; 
-      transform: translateY(-2px); 
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3); 
-    }
-    .action-btns button { 
+    button:hover, button.active { 
       background: #0066ff; 
+      transform: translateY(-3px); 
+      box-shadow: 0 6px 16px rgba(0,102,255,0.4); 
     }
-    .action-btns button:hover { 
-      background: #3388ff; 
+    textarea { 
+      width: 100%; height: 100px; padding: 14px; 
+      background: rgba(255,255,255,0.1); 
+      border: 1px solid rgba(255,255,255,0.2); 
+      border-radius: 8px; color: white; 
     }
-    .output { margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; }
+    .generate-btn { 
+      background: #00cc66; font-size: 18px; padding: 16px 32px; 
+      margin-top: 20px; width: 100%; 
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>8BLO • Image Test Lab</h1>
-    
-    <div class="section">
-      <h3>Character Description</h3>
-      <textarea id="description" placeholder="Describe the person (age, skin tone, body type, breast characteristics, hair, etc.)"></textarea>
-    </div>
+    <h1>8BLO • Visualization Lab</h1>
 
+    <!-- Section 1: Body Frame -->
     <div class="section">
-      <h3>Quick Body Presets</h3>
-      <div class="presets">
-        <button onclick="loadPreset(1)">Natural 49yo</button>
-        <button onclick="loadPreset(2)">Significant Ptosis</button>
-        <button onclick="loadPreset(3)">Post-Pregnancy</button>
-        <button onclick="loadPreset(4)">Deep Brown Skin</button>
-        <button onclick="loadPreset(5)">Older 58yo</button>
+      <h3>1. Body Frame</h3>
+      <div class="options" id="bodyFrame">
+        <button onclick="selectSingle(this)">Slim Feminine</button>
+        <button onclick="selectSingle(this)">Average Feminine</button>
+        <button onclick="selectSingle(this)">Broad Shoulders</button>
+        <button onclick="selectSingle(this)">Curvy</button>
+        <button onclick="selectSingle(this)">Fuller Figure</button>
       </div>
     </div>
 
-    <div class="section action-btns">
-      <button onclick="copyPrompt('kitchen-clothed')">Kitchen Scene - Clothed</button>
-      <button onclick="copyPrompt('kitchen-nude')">Kitchen Scene - Topless</button>
-      <button onclick="copyPrompt('single')">Single Portrait</button>
-      <button onclick="copyPrompt('context')">Context Sheet</button>
+    <!-- Section 2: Breast Goal -->
+    <div class="section">
+      <h3>2. Breast Goal</h3>
+      <div class="options" id="breastGoal">
+        <button onclick="selectSingle(this)">Natural</button>
+        <button onclick="selectSingle(this)">Subtle Enhancement</button>
+        <button onclick="selectSingle(this)">Full Round</button>
+        <button onclick="selectSingle(this)">Obvious Implants</button>
+      </div>
     </div>
+
+    <!-- Section 3: Additional Characteristics (Multiple) -->
+    <div class="section">
+      <h3>3. Additional Characteristics (select all that apply)</h3>
+      <div class="options" id="characteristics">
+        <button onclick="toggleSelect(this)">Significant Ptosis</button>
+        <button onclick="toggleSelect(this)">Post-Pregnancy Changes</button>
+        <button onclick="toggleSelect(this)">Breast Lift (Anchor Scars)</button>
+        <button onclick="toggleSelect(this)">Trans Feminine Features</button>
+      </div>
+    </div>
+
+    <textarea id="custom" placeholder="Additional details (hair, skin tone, age, etc.)"></textarea>
+
+    <button class="generate-btn" onclick="generatePrompt()">Copy Full Prompt</button>
   </div>
 
   <script>
-    const baseKitchen = `Wide angle lens, photorealistic modern kitchen scene. Three triplet sisters who look nearly identical, standing naturally around a large kitchen island as if casually talking to each other. The island is approximately ten feet long and waist height. The three women are clearly separated with natural spacing. One at the far end facing forward, one at the corner in 3/4 view, one on the long side in profile. Camera at chest level, bright clean lighting.`;
-
-    function loadPreset(n) {
-      const d = document.getElementById('description');
-      if (n===1) d.value = "49-year-old woman with fair skin, significant natural ptosis, full lower pole with low upper pole volume, strong east-west breast orientation, shoulder-length wavy brown hair";
-      if (n===2) d.value = "49-year-old woman with very pendulous breasts, significant natural ptosis, full lower pole, minimal upper pole, strong east-west orientation, shoulder-length wavy brown hair";
-      if (n===3) d.value = "47-year-old woman with post-pregnancy changes, noticeable ptosis, loose stomach skin, full lower pole, shoulder-length wavy brown hair";
-      if (n===4) d.value = "49-year-old woman with deep brown skin, significant natural ptosis, full lower pole, low upper pole volume, strong east-west orientation, shoulder-length wavy black hair";
-      if (n===5) d.value = "58-year-old woman with mature natural ptosis, softer body, full lower pole, shoulder-length silver hair";
+    function selectSingle(btn) {
+      const parent = btn.parentElement;
+      Array.from(parent.children).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    function copyPrompt(type) {
-      const desc = document.getElementById('description').value.trim();
-      if (!desc) { alert("Please fill in the character description"); return; }
+    function toggleSelect(btn) {
+      btn.classList.toggle('active');
+    }
 
-      let prompt = "";
-      if (type === 'kitchen-clothed') prompt = baseKitchen + "\n\n" + desc + ", wearing fitted white ribbed tank top and black biker shorts";
-      else if (type === 'kitchen-nude') prompt = baseKitchen + "\n\n" + desc + ", completely topless, wearing only black biker shorts";
-      else if (type === 'single') prompt = "Photorealistic portrait of " + desc + ", standing in modern apartment with city view at night, soft cinematic lighting";
-      else if (type === 'context') prompt = "Contact sheet, multiple professional poses of the same woman: " + desc + ", various angles and poses, clean studio lighting";
+    function generatePrompt() {
+      const body = Array.from(document.querySelectorAll('#bodyFrame button.active')).map(b => b.textContent).join(", ");
+      const goal = Array.from(document.querySelectorAll('#breastGoal button.active')).map(b => b.textContent).join(", ");
+      const chars = Array.from(document.querySelectorAll('#characteristics button.active')).map(b => b.textContent).join(", ");
+      const custom = document.getElementById('custom').value.trim();
+
+      let prompt = `Photorealistic image of a woman with ${body || "average feminine frame"}. Breast goal: ${goal || "natural"}. ${chars ? chars + ". " : ""}${custom ? custom + "." : ""} High detail, natural lighting.`;
 
       navigator.clipboard.writeText(prompt);
       alert("✅ Prompt copied to clipboard!");
